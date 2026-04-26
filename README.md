@@ -8,13 +8,13 @@ It is designed for building a reusable content intelligence library: not just a 
 
 ## What It Does
 
-- ðŸ”— Takes a social media post or article link
-- ðŸ§­ Detects whether it is a `Video`, `Carousel`, `Text`, or `Article`
-- ðŸ–¼ï¸ Finds cover images and thumbnails when available
-- ðŸ“Š Captures visible metrics like views, likes, comments, and shares
-- ðŸ§  Writes content-strategy analysis for hook, messaging, emotion, audience, and viral mechanism
-- ðŸŽ¬ Handles video-specific fields like visual style, pacing, audio, and duration
-- ðŸ“¥ Saves the result directly into Airtable without manual copy-paste
+- 🔗 Takes a social media post or article link
+- 🧭 Detects whether it is a `Video`, `Carousel`, `Text`, or `Article`
+- 🖼️ Finds cover images and thumbnails when available
+- 📊 Captures visible metrics like views, likes, comments, and shares
+- 🧠 Writes content-strategy analysis for hook, messaging, emotion, audience, and viral mechanism
+- 🎬 Handles video-specific fields like visual style, pacing, audio, and duration
+- 🔥 Saves the result directly into Airtable without manual copy-paste
 
 ## Why It Exists
 
@@ -259,11 +259,11 @@ rg "pat[A-Za-z0-9]|AIRTABLE_API_TOKEN=.*\\S|cookie|auth_token" --glob '!README.m
 
 ## Safety
 
-- ðŸ” Never commit Airtable tokens, cookies, passwords, or browser session data
-- ðŸš§ Do not bypass login gates, privacy controls, or platform limits
-- ðŸ§¾ Omit uncertain fields instead of inventing data
-- ðŸ§© Use existing Airtable select options when fields are constrained
-- ðŸ§ª Test changes with a small number of records before bulk updates
+- 🔒 Never commit Airtable tokens, cookies, passwords, or browser session data
+- 🚧 Do not bypass login gates, privacy controls, or platform limits
+- 🧾 Omit uncertain fields instead of inventing data
+- 🧩 Use existing Airtable select options when fields are constrained
+- 🧪 Test changes with a small number of records before bulk updates
 
 ## Suggested GitHub Description
 
