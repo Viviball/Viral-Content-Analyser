@@ -217,10 +217,11 @@ Use this only for confirmed `h:mm` duration fields. For seconds-aware duration o
 
 Some platforms hide useful data from logged-out requests.
 
-- Instagram and LinkedIn may require authenticated browser context.
-- X/Twitter may expose useful data through page state or oEmbed.
-- YouTube and articles often expose metadata through Open Graph, Twitter cards, or JSON-LD.
-- If metrics or duration are not available, the skill should omit them instead of guessing.
+- **Instagram** — public posts are handled by Instaloader, which fetches views, video duration, exact likes, comments, caption, and cover image without any login. Private or login-gated posts fall back to authenticated browser context.
+- **LinkedIn** — requires an authenticated browser session. Document posts route to `Carousel`; text-only posts route to `Text`.
+- **X/Twitter** — may expose useful data through page state or oEmbed.
+- **YouTube and articles** — metadata is usually available through Open Graph, Twitter cards, or JSON-LD without authentication.
+- If metrics or duration are not available, the skill omits them instead of guessing.
 
 The skill must not ask users for passwords, cookies, or browser session tokens.
 
@@ -228,11 +229,11 @@ The skill must not ask users for passwords, cookies, or browser session tokens.
 
 | File | Purpose |
 | --- | --- |
-| `SKILL.md` | Main Codex skill instructions and workflow |
-| `.env.example` | Environment variable template |
-| `.gitignore` | Keeps secrets and local files out of Git |
-| `CONTRIBUTING.md` | Contribution guidelines |
-| `SECURITY.md` | Secret-handling and platform-access guidance |
+| `SKILL.md` | Main skill instructions: intake workflow, field schema, Instaloader extraction, Airtable routing, and viral analysis rules |
+| `.env.example` | Airtable environment variable template — copy to `.env` and fill in your base ID, token, and table names or IDs |
+| `.gitignore` | Keeps secrets, `.env`, and local state files out of Git |
+| `CONTRIBUTING.md` | Contribution guidelines — how to write focused pull requests and what to include in the description |
+| `SECURITY.md` | Secret-handling and platform-access guidance — what must never be committed and how to handle login-gated content |
 
 ## Development
 
