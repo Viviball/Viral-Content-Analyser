@@ -1,7 +1,7 @@
 ---
 name: viral-content-analyser
 description: Automates Airtable viral-content analysis records from social media post links and article URLs. Use this skill whenever the user gives an AI a social media post, video, carousel, text post, article, newsletter, blog post, or any URL and asks to save, log, analyze, or add it as content inspiration. Detects whether the reference is Video, Carousel, Text, or Article; extracts metadata and cover imagery; writes viral analysis around hook, messaging, emotions, and target audience; then creates the correct Airtable record using the configured viral-content schema.
-compatibility: "Requires browser/web fetch access, Airtable API access, and Claude-in-Chrome or an authenticated browser for LinkedIn/Instagram."
+compatibility: "Requires browser/web fetch access, Airtable API access, and Instaloader (scrapling-env Python) for full Instagram metrics. Claude-in-Chrome or authenticated browser for LinkedIn and private Instagram content."
 ---
 
 # Viral Content Analyser
@@ -46,6 +46,9 @@ Ask once per session for any missing values, then keep them in memory for the re
 - `AIRTABLE_CAROUSEL_TABLE` - table ID or exact table name for Carousel references
 - `AIRTABLE_TEXT_TABLE` - table ID or exact table name for Text references
 - `AIRTABLE_ARTICLE_TABLE` - table ID or exact table name for Article references
+
+**Python executable:** `C:\Users\Maomao\scrapling-env\Scripts\python.exe`
+**Package:** `instaloader` v4.15.1 (installed in scrapling-env — no login required for public posts)
 
 If the user has not provided table IDs yet, ask for only the missing table names or IDs before pushing to Airtable. You may still analyze the content and save a draft payload while waiting. Once the required Airtable configuration exists, do not ask for save confirmation.
 
@@ -146,25 +149,53 @@ Resolve relative image URLs against the page URL. Use a direct, publicly reachab
 
 Do not invent a cover URL. If none is available, leave `Cover` blank and mention that in `Notes`.
 
-### 4. Use Claude-in-Chrome For LinkedIn And Instagram
+### 4. Use Instaloader For Instagram Data
 
-LinkedIn and Instagram often hide data from unauthenticated fetches. For these:
+Instagram hides views, duration, and full metrics from all unauthenticated web fetches. The `<meta name="description">` tag only exposes likes, comments, caption, creator, and date. Use **Instaloader** as the primary extraction method for any Instagram URL — it works anonymously on public posts without any login.
 
-1. Open/read the post through Claude-in-Chrome or the available authenticated browser session.
-2. Use the user's logged-in page view to capture visible text, creator, date, media type, engagement, slide count, and cover/thumbnail.
-3. Do not ask the user for cookies, session tokens, passwords, or browser storage.
-4. Do not bypass privacy gates. If the authenticated browser cannot access the post, ask the user for a screenshot, pasted caption, or creator/date details.
+**Why public scraping misses views:** Instagram's CDN returns a minimal server-side-rendered page to non-browser requests. View counts, play counts, and video duration are loaded client-side via a private GraphQL API. Instaloader handles this automatically using Instagram's internal GraphQL endpoint.
 
-For LinkedIn document posts, inspect whether it is a slide/document carousel and route to `Carousel`. For LinkedIn text-only posts, route to `Text`. For Instagram reels, route to `Video`; Instagram multi-image posts route to `Carousel`.
+#### Instaloader extraction script
 
-For Instagram metrics and video length, try these sources before leaving `Length` blank:
+Extract the shortcode from the Instagram URL (the segment after `/reel/`, `/p/`, or `/tv/`), then run:
 
-1. Page metadata, especially `<meta name="description">`, for visible likes, comments, creator, caption, and date.
-2. Embedded page JSON or GraphQL/Relay payloads for `video_duration`, `video_versions`, `play_count`, `view_count`, and media resources.
-3. Authenticated browser page state when public metadata is incomplete.
-4. Instaloader when available: extract the shortcode from the Reel URL, then use `Post.from_shortcode(context, shortcode)` and read `post.video_duration`, `post.video_url`, `post.video_play_count`, `post.video_view_count`, `post.likes`, `post.comments`, `post.caption`, `post.date_utc`, and `post.owner_username`.
-5. Instagrapi only when the user provides an approved authenticated Instagram account/session. Use `media_pk_from_url()` then `media_info()` to retrieve fields such as `comment_count`, `like_count`, `view_count`, `play_count`, `video_duration`, `video_url`, and carousel `resources`.
-6. If a legitimate direct video URL or downloaded video file is available, use media metadata tools such as `ffprobe` to read duration and write the duration in seconds to Airtable `Length`.
+```python
+import instaloader, json, sys
+
+shortcode = sys.argv[1]  # e.g. "DXMwW5GjBY8"
+L = instaloader.Instaloader()
+post = instaloader.Post.from_shortcode(L.context, shortcode)
+
+print(json.dumps({
+    "owner_username":   post.owner_username,
+    "date_utc":         post.date_utc.strftime("%Y-%m-%d"),
+    "caption":          post.caption or "",
+    "likes":            post.likes,
+    "comments":         post.comments,
+    "is_video":         post.is_video,
+    "video_duration":   post.video_duration if post.is_video else None,
+    "video_view_count": post.video_view_count if post.is_video else None,
+    "url":              post.url,          # thumbnail/cover image URL
+    "video_url":        post.video_url if post.is_video else None,
+}))
+```
+
+Run with: `C:\Users\Maomao\scrapling-env\Scripts\python.exe script.py <shortcode>`
+
+Parse the JSON output before building the Airtable payload. Use `url` as the `Cover` attachment URL. `video_duration` is in seconds (decimal) — round to the nearest whole second and apply the Airtable `Length` field format rules.
+
+#### Instagram extraction priority order
+
+1. **Instaloader** (primary, no login needed) — run the script above for all fields.
+2. **Page metadata** (`<meta name="description">`) — fallback for likes, comments, caption, creator, date if Instaloader fails.
+3. **Embedded GraphQL/Relay payloads** — inspect page source for `video_duration`, `play_count`, `view_count`.
+4. **Claude-in-Chrome or authenticated browser** — for private content or client-side-only rendering.
+5. **ffprobe on downloaded video file** — if a direct video URL is available, use ffprobe to read duration precisely.
+
+Do not bypass privacy gates. If a post is private and Instaloader cannot access it, ask the user for a screenshot or pasted caption.
+
+For LinkedIn: open through Claude-in-Chrome or authenticated browser. LinkedIn document posts → `Carousel`; text-only posts → `Text`.
+For Instagram reels → `Video`; multi-image posts → `Carousel`.
 
 Length handling rules:
 
