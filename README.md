@@ -8,13 +8,10 @@ It is designed for building a reusable content intelligence library: not just a 
 
 ## What It Does
 
-- 🔗 Takes a social media post or article link
-- 🧭 Detects whether it is a `Video`, `Carousel`, `Text`, or `Article`
-- 🖼️ Finds cover images and thumbnails when available
-- 📊 Captures visible metrics like views, likes, comments, and shares
-- 🧠 Writes content-strategy analysis for hook, messaging, emotion, audience, and viral mechanism
-- 🎬 Handles video-specific fields like visual style, pacing, audio, and duration
-- 🔥 Saves the result directly into Airtable without manual copy-paste
+- 🔗 **Turn any link into a structured record** — paste a post, video, carousel, or article and get a complete Airtable entry automatically
+- 🧠 **Understand why content works** — every record includes hook, emotion, target audience, and viral mechanism so you can study and reuse winning patterns
+- 📊 **Capture performance data without the effort** — views, likes, comments, and cover images pulled from the page automatically
+- 🔥 **Build your content library without busywork** — routes to the right table, fills the right fields, and saves without asking
 
 ## Why It Exists
 
