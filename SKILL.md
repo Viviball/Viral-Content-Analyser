@@ -12,13 +12,13 @@ Do not just summarize the link. The goal is to let any AI turn a social media or
 
 ## Operating Model
 
-When the user gives any AI a social media post link or article URL, the AI should use this skill to automate the Airtable entry end to end:
+When the user gives any AI a social media post link or article URL, the AI should use this skill to automate the Airtable entry end to end. Do not ask the user to confirm before saving when Airtable credentials and table configuration are available; create the record automatically, then report what was saved.
 
 1. Read and normalize the URL.
 2. Detect the content type: `Video`, `Carousel`, `Text`, or `Article`.
 3. Extract visible metadata, media signals, cover imagery, metrics, caption, creator, date, and duration when available.
 4. Generate the strategy fields for Airtable: `Hook`, `Messaging`, `Emotion`, `Audience`, `Viral`, `Description`, `Visual`, `Pacing`, and `Audio` where relevant.
-5. Create the Airtable record in the matching table.
+5. Create the Airtable record in the matching table automatically.
 6. Confirm what was saved and briefly note any missing or inferred fields.
 
 ## Required Session Config
@@ -32,7 +32,7 @@ Ask once per session for any missing values, then keep them in memory for the re
 - `AIRTABLE_TEXT_TABLE` - table ID or exact table name for Text references
 - `AIRTABLE_ARTICLE_TABLE` - table ID or exact table name for Article references
 
-If the user has not provided table IDs yet, ask for the four table names or IDs before pushing to Airtable. You may still analyze the content and save a draft payload while waiting.
+If the user has not provided table IDs yet, ask for only the missing table names or IDs before pushing to Airtable. You may still analyze the content and save a draft payload while waiting. Once the required Airtable configuration exists, do not ask for save confirmation.
 
 ## Content Type Routing
 
@@ -86,7 +86,7 @@ For each link:
 1. Keep the original URL in `URL`.
 2. Remove obvious tracking parameters only when they do not affect access (`utm_*`, `fbclid`, `gclid`, etc.).
 3. Preserve platform-specific IDs, share tokens, and post parameters.
-4. Process multiple links one at a time and confirm each save separately.
+4. Process multiple links one at a time and save each Airtable record automatically when required configuration is available.
 
 ### 2. Fetch Page Metadata
 
@@ -205,6 +205,8 @@ Avoid vague lines such as "great content", "very engaging", or "good visuals".
 
 Choose the target table from `Content Type Routing`, then create the record.
 
+Saving is automatic. If the user asks to analyze, save, log, add, or process a link and Airtable configuration is available, create the Airtable record after extraction and analysis without asking for a separate confirmation.
+
 Use table IDs when possible. If using table names, URL-encode the table name.
 
 ```bash
@@ -240,7 +242,7 @@ If the Airtable API returns an error:
 - If the error is an invalid option, preserve the user's data in `Notes` and ask whether to add/update Airtable select options.
 - If credentials or table config are missing, ask only for the missing value.
 
-## Confirmation
+## Save Summary
 
 After a successful Airtable save, respond compactly:
 
