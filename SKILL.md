@@ -10,6 +10,21 @@ Content inspiration intake workflow. For every shared URL, collect the source, a
 
 Do not just summarize the link. The goal is to let any AI turn a social media or article link into structured Airtable data automatically: hook, emotional driver, viral mechanism, audience, platform context, creator, cover image, metrics, duration, and source URL.
 
+## Analysis Mechanism
+
+Analyze each reference by separating observed evidence from strategic interpretation:
+
+1. Capture observable facts: URL, creator, platform, date, caption, media type, cover image, visible metrics, and duration when available.
+2. Classify the format as `Video`, `Carousel`, `Text`, or `Article`.
+3. Diagnose the hook: first line, first frame, visual surprise, title promise, contradiction, proof, transformation, or curiosity gap.
+4. Extract the core message: what the post wants the viewer to believe, feel, try, buy, copy, or remember.
+5. Identify the target audience and audience psychology: identity, desire, pain point, aspiration, fear, status cue, or job-to-be-done.
+6. Map the emotional driver: curiosity, relief, aspiration, urgency, disbelief, envy, belonging, validation, delight, or fear of missing out.
+7. Read the format mechanics: pacing, sequence, reveal, proof, before/after, demo, argument structure, specificity, and payoff.
+8. Describe the visual and audio system when available.
+9. Explain the viral mechanism: novelty, usefulness, identity signal, controversy, social proof, trend fit, emotional resonance, clarity, copyability, or payoff.
+10. Convert the result into Airtable fields without asking for a separate save confirmation when Airtable config is available.
+
 ## Operating Model
 
 When the user gives any AI a social media post link or article URL, the AI should use this skill to automate the Airtable entry end to end. Do not ask the user to confirm before saving when Airtable credentials and table configuration are available; create the record automatically, then report what was saved.

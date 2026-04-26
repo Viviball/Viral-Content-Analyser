@@ -1,4 +1,4 @@
-# Viral Content Analyser
+﻿# Viral Content Analyser
 
 Turn any social media post into a structured Airtable content reference automatically.
 
@@ -8,13 +8,13 @@ It is designed for building a reusable content intelligence library: not just a 
 
 ## What It Does
 
-- 🔗 Takes a social media post or article link
-- 🧭 Detects whether it is a `Video`, `Carousel`, `Text`, or `Article`
-- 🖼️ Finds cover images and thumbnails when available
-- 📊 Captures visible metrics like views, likes, comments, and shares
-- 🧠 Writes content-strategy analysis for hook, messaging, emotion, audience, and viral mechanism
-- 🎬 Handles video-specific fields like visual style, pacing, audio, and duration
-- 📥 Saves the result directly into Airtable without manual copy-paste
+- ðŸ”— Takes a social media post or article link
+- ðŸ§­ Detects whether it is a `Video`, `Carousel`, `Text`, or `Article`
+- ðŸ–¼ï¸ Finds cover images and thumbnails when available
+- ðŸ“Š Captures visible metrics like views, likes, comments, and shares
+- ðŸ§  Writes content-strategy analysis for hook, messaging, emotion, audience, and viral mechanism
+- ðŸŽ¬ Handles video-specific fields like visual style, pacing, audio, and duration
+- ðŸ“¥ Saves the result directly into Airtable without manual copy-paste
 
 ## Why It Exists
 
@@ -30,6 +30,44 @@ Instead of asking an AI to simply summarize a link, this skill guides it to pres
 4. The AI writes reusable analysis fields such as hook, emotion, audience, messaging, and viral mechanism.
 5. The AI creates a new Airtable record in the correct table automatically.
 6. The AI reports what was saved and notes any missing or inferred fields.
+
+## Analysis Mechanism
+
+Viral Content Analyser does not only summarize a post. It breaks the content into reusable strategic components, then maps those components to Airtable fields.
+
+The analysis follows this mechanism:
+
+1. **Evidence Capture**
+   The AI first collects observable facts: URL, platform, creator, date, caption, media type, cover image, visible metrics, video duration, and any accessible page metadata. It separates verified data from inferred analysis.
+
+2. **Content-Type Classification**
+   The AI decides whether the reference is mainly a `Video`, `Carousel`, `Text`, or `Article`. This determines which Airtable table receives the record and which fields matter most.
+
+3. **Hook Diagnosis**
+   The AI identifies what makes someone stop scrolling: the first line, first frame, visual surprise, title promise, contradiction, proof, transformation, or curiosity gap.
+
+4. **Message Extraction**
+   The AI reduces the post to its core message: what the creator wants the viewer to believe, feel, try, buy, copy, or remember.
+
+5. **Audience Psychology**
+   The AI identifies who the post is for and why that audience would care. It looks for identity signals, desires, pain points, aspirations, fears, status cues, and jobs-to-be-done.
+
+6. **Emotion Mapping**
+   The AI names the emotional driver behind engagement, such as curiosity, relief, aspiration, urgency, disbelief, envy, belonging, validation, delight, or fear of missing out.
+
+7. **Retention and Format Mechanics**
+   For videos and carousels, the AI looks at pacing, sequence, reveals, proof points, before/after structure, demonstrations, visual rhythm, and payoff. For text and articles, it looks at framing, argument structure, specificity, and shareability.
+
+8. **Visual and Audio Reading**
+   The AI describes the visual system: composition, first frame, demo style, overlays, editing pattern, color, screenshots, proof, or interface shown. If audio is available, it notes whether voiceover, music, silence, or sound design carries the idea.
+
+9. **Virality Diagnosis**
+   The AI explains why the post could spread: novelty, usefulness, identity signaling, controversy, social proof, trend fit, emotional resonance, clarity, copyability, or a strong payoff.
+
+10. **Airtable Mapping**
+    The AI turns the analysis into structured fields such as `Hook`, `Messaging`, `Emotion`, `Audience`, `Viral`, `Description`, `Visual`, `Pacing`, `Audio`, `Caption`, `Length`, and metrics.
+
+The result is a content intelligence record: a reusable breakdown of why the post works, not just a saved link.
 
 ## Supported Content Types
 
@@ -221,11 +259,11 @@ rg "pat[A-Za-z0-9]|AIRTABLE_API_TOKEN=.*\\S|cookie|auth_token" --glob '!README.m
 
 ## Safety
 
-- 🔐 Never commit Airtable tokens, cookies, passwords, or browser session data
-- 🚧 Do not bypass login gates, privacy controls, or platform limits
-- 🧾 Omit uncertain fields instead of inventing data
-- 🧩 Use existing Airtable select options when fields are constrained
-- 🧪 Test changes with a small number of records before bulk updates
+- ðŸ” Never commit Airtable tokens, cookies, passwords, or browser session data
+- ðŸš§ Do not bypass login gates, privacy controls, or platform limits
+- ðŸ§¾ Omit uncertain fields instead of inventing data
+- ðŸ§© Use existing Airtable select options when fields are constrained
+- ðŸ§ª Test changes with a small number of records before bulk updates
 
 ## Suggested GitHub Description
 
