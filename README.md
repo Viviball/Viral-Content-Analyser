@@ -1,8 +1,8 @@
-# Content Reference Agent
+# Viral Content Analyser
 
 Turn any social media post into a structured Airtable content reference automatically.
 
-Content Reference Agent is a Codex skill for creators, marketers, researchers, and content strategists who collect inspiration from the internet. Give an AI a post from X/Twitter, Instagram, TikTok, LinkedIn, YouTube, or an article URL, and the skill extracts the useful details, analyzes why the content works, and saves everything into the right Airtable table.
+Viral Content Analyser is a Codex skill for creators, marketers, researchers, and content strategists who collect inspiration from the internet. Give an AI a post from X/Twitter, Instagram, TikTok, LinkedIn, YouTube, or an article URL, and the skill extracts the useful details, analyzes why the content works, and saves everything into the right Airtable table.
 
 It is designed for building a reusable content intelligence library: not just a list of links, but a searchable database of hooks, emotions, audience insights, viral mechanisms, captions, visuals, metrics, and platform context.
 

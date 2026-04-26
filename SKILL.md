@@ -1,10 +1,10 @@
 ---
-name: content-reference-agent
-description: Automates Airtable content-reference records from social media post links and article URLs. Use this skill whenever the user gives an AI a social media post, video, carousel, text post, article, newsletter, blog post, or any URL and asks to save, log, analyze, or add it as content inspiration. Detects whether the reference is Video, Carousel, Text, or Article; extracts metadata and cover imagery; writes viral analysis around hook, messaging, emotions, and target audience; then creates the correct Airtable record using the configured content-reference schema.
+name: viral-content-analyser
+description: Automates Airtable viral-content analysis records from social media post links and article URLs. Use this skill whenever the user gives an AI a social media post, video, carousel, text post, article, newsletter, blog post, or any URL and asks to save, log, analyze, or add it as content inspiration. Detects whether the reference is Video, Carousel, Text, or Article; extracts metadata and cover imagery; writes viral analysis around hook, messaging, emotions, and target audience; then creates the correct Airtable record using the configured viral-content schema.
 compatibility: "Requires browser/web fetch access, Airtable API access, and Claude-in-Chrome or an authenticated browser for LinkedIn/Instagram."
 ---
 
-# Content Reference Agent
+# Viral Content Analyser
 
 Content inspiration intake workflow. For every shared URL, collect the source, analyze why it works, then create an Airtable record in the table that matches the content type.
 
