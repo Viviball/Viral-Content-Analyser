@@ -1,14 +1,25 @@
 ---
 name: content-reference-agent
-description: Saves social content references and article inspiration to an Airtable content library and Karakeep. Use this skill whenever the user shares a social media post, video, carousel, text post, article, newsletter, blog post, or any URL and asks to save, log, archive, analyze, or add it as content inspiration. Detects whether the reference is Video, Carousel, Text, or Article; extracts metadata and cover imagery; writes viral analysis around hook, messaging, emotions, and target audience; saves the source to Karakeep; then routes the record to the correct Airtable table using the configured content-reference schema.
-compatibility: "Requires browser/web fetch access, Airtable API access, Karakeep API access, and Claude-in-Chrome or an authenticated browser for LinkedIn/Instagram."
+description: Automates Airtable content-reference records from social media post links and article URLs. Use this skill whenever the user gives an AI a social media post, video, carousel, text post, article, newsletter, blog post, or any URL and asks to save, log, analyze, or add it as content inspiration. Detects whether the reference is Video, Carousel, Text, or Article; extracts metadata and cover imagery; writes viral analysis around hook, messaging, emotions, and target audience; then creates the correct Airtable record using the configured content-reference schema.
+compatibility: "Requires browser/web fetch access, Airtable API access, and Claude-in-Chrome or an authenticated browser for LinkedIn/Instagram."
 ---
 
 # Content Reference Agent
 
-Content inspiration intake workflow. For every shared URL, collect the source, analyze why it works, save it to Karakeep, then create an Airtable record in the table that matches the content type.
+Content inspiration intake workflow. For every shared URL, collect the source, analyze why it works, then create an Airtable record in the table that matches the content type.
 
-Do not just summarize the link. The goal is to preserve the reference as reusable creative intelligence: hook, emotional driver, viral mechanism, audience, platform context, creator, cover image, and source URL.
+Do not just summarize the link. The goal is to let any AI turn a social media or article link into structured Airtable data automatically: hook, emotional driver, viral mechanism, audience, platform context, creator, cover image, metrics, duration, and source URL.
+
+## Operating Model
+
+When the user gives any AI a social media post link or article URL, the AI should use this skill to automate the Airtable entry end to end:
+
+1. Read and normalize the URL.
+2. Detect the content type: `Video`, `Carousel`, `Text`, or `Article`.
+3. Extract visible metadata, media signals, cover imagery, metrics, caption, creator, date, and duration when available.
+4. Generate the strategy fields for Airtable: `Hook`, `Messaging`, `Emotion`, `Audience`, `Viral`, `Description`, `Visual`, `Pacing`, and `Audio` where relevant.
+5. Create the Airtable record in the matching table.
+6. Confirm what was saved and briefly note any missing or inferred fields.
 
 ## Required Session Config
 
@@ -20,8 +31,6 @@ Ask once per session for any missing values, then keep them in memory for the re
 - `AIRTABLE_CAROUSEL_TABLE` - table ID or exact table name for Carousel references
 - `AIRTABLE_TEXT_TABLE` - table ID or exact table name for Text references
 - `AIRTABLE_ARTICLE_TABLE` - table ID or exact table name for Article references
-- `KARAKEEP_BASE_URL` - for example `https://karakeep.example.com`
-- `KARAKEEP_API_TOKEN`
 
 If the user has not provided table IDs yet, ask for the four table names or IDs before pushing to Airtable. You may still analyze the content and save a draft payload while waiting.
 
@@ -52,7 +61,6 @@ Populate the current Airtable fields below. Use exact field names.
 - `Date` - published date if visible; otherwise today's date in `YYYY-MM-DD`.
 - `Cover` - Airtable attachment array using the best image URL: `[{"url":"https://..."}]`. Leave blank only if no usable image can be found.
 - `Type` - one of `Video`, `Carousel`, `Text`, `Article` if this field exists in the target table.
-- `Karakeep` - Karakeep bookmark URL or bookmark ID if returned and the field exists.
 - `Messaging` - compact analysis of the core message, angle, promise, and proof.
 - `Target Audience` - who it is for, including job-to-be-done or identity when clear.
 - `Engagement` - visible metrics such as likes, comments, reposts, views, or saves.
@@ -193,30 +201,6 @@ Good viral analysis names the mechanism:
 
 Avoid vague lines such as "great content", "very engaging", or "good visuals".
 
-## Save To Karakeep
-
-Save the source URL to Karakeep before Airtable when `KARAKEEP_API_TOKEN` and `KARAKEEP_BASE_URL` are available.
-
-Karakeep uses Bearer authentication. Create a link bookmark at:
-
-```bash
-curl -sS -X POST "$KARAKEEP_BASE_URL/api/v1/bookmarks" \
-  -H "Authorization: Bearer $KARAKEEP_API_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "type": "link",
-    "url": "<url>",
-    "title": "<title or hook>",
-    "note": "<short analysis note>",
-    "summary": "<description>",
-    "source": "api"
-  }'
-```
-
-If Karakeep returns `200` because the bookmark already exists, treat it as success. Capture the bookmark `id` or returned URL for Airtable `Karakeep` if available.
-
-If Karakeep credentials are missing, ask the user for the token and base URL. If the user wants to skip Karakeep for this save, continue to Airtable and note that Karakeep was skipped.
-
 ## Push To Airtable
 
 Choose the target table from `Content Type Routing`, then create the record.
@@ -239,7 +223,6 @@ curl -sS -X POST "https://api.airtable.com/v0/$AIRTABLE_BASE_ID/$TARGET_TABLE" \
       "Date": "<YYYY-MM-DD>",
       "Cover": [{"url": "<cover image url>"}],
       "Type": "<Video|Carousel|Text|Article>",
-      "Karakeep": "<bookmark id or url>",
       "Messaging": "<messaging analysis>",
       "Target Audience": "<audience>",
       "Engagement": "<visible metrics>",
@@ -259,7 +242,7 @@ If the Airtable API returns an error:
 
 ## Confirmation
 
-After successful Karakeep and Airtable saves, respond compactly:
+After a successful Airtable save, respond compactly:
 
 ```text
 Saved to Content Library.
@@ -271,7 +254,6 @@ Hook: ...
 Emotion: ...
 Viral: ...
 Cover: found from og:image
-Karakeep: saved
 Airtable: saved to Video
 ```
 
@@ -284,5 +266,4 @@ Mention missing or inferred fields briefly. Do not include private tokens or raw
 - Article with no published date: use today's date and add `Published date not visible` to `Notes`.
 - Multiple links: process sequentially; do not combine them into one record.
 - Ambiguous format: route by the main reason the user saved it, then explain the inference in `Notes`.
-- Duplicate in Karakeep: treat an existing bookmark as success.
 - Duplicate in Airtable: if duplicate checking is available in the table, update the existing record only if the user asked for deduplication; otherwise create a new record.

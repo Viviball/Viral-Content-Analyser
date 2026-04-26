@@ -1,23 +1,23 @@
 # Content Reference Agent
 
-Codex skill for saving social posts, videos, carousels, text posts, and articles into an Airtable content reference library, with optional Karakeep archiving.
+Codex skill for turning social posts, videos, carousels, text posts, and articles into structured Airtable content-reference records.
 
 ## Repository Description
 
-AI-assisted content reference intake skill that extracts platform metadata, classifies content type, captures cover imagery, writes reusable viral analysis, archives the source in Karakeep, and creates the right Airtable record.
+AI-assisted content reference intake skill that extracts platform metadata, classifies content type, captures cover imagery, writes reusable viral analysis, and creates the right Airtable record.
 
 Suggested GitHub topics:
 
 ```text
-codex-skill airtable karakeep content-strategy social-media metadata-scraping content-library
+codex-skill airtable content-strategy social-media metadata-scraping content-library
 ```
 
 ## What It Does
 
+- Lets an AI receive a social media post link and automate the Airtable entry field by field.
 - Routes each URL as `Video`, `Carousel`, `Text`, or `Article`.
 - Extracts creator, platform, date, caption, cover image, engagement, and duration when available.
 - Writes strategy-focused fields such as hook, messaging, emotion, audience, visual system, pacing, audio, and viral mechanism.
-- Saves source links to Karakeep before writing to Airtable when Karakeep credentials are configured.
 - Handles LinkedIn and Instagram carefully through authenticated browser context when public metadata is incomplete.
 - Includes Airtable duration handling for short-form videos where duration fields may display minutes instead of seconds.
 
@@ -40,8 +40,6 @@ AIRTABLE_VIDEO_TABLE=
 AIRTABLE_CAROUSEL_TABLE=
 AIRTABLE_TEXT_TABLE=
 AIRTABLE_ARTICLE_TABLE=
-KARAKEEP_BASE_URL=
-KARAKEEP_API_TOKEN=
 ```
 
 Do not commit real tokens. Copy `.env.example` to `.env` for local use if your runner loads environment files.
@@ -59,7 +57,7 @@ Core fields include:
 
 ```text
 URL, Hook, Emotion, Viral, Description, Platform, Creator, Date, Cover,
-Type, Karakeep, Messaging, Target Audience, Engagement, Notes, Audience,
+Type, Messaging, Target Audience, Engagement, Notes, Audience,
 Comments, Visual, Audio, Pacing, Caption, Length
 ```
 
@@ -86,4 +84,3 @@ Before committing:
 git status --short
 git diff --check
 ```
-
