@@ -83,8 +83,8 @@ The result is a content intelligence record: a reusable breakdown of why the pos
 Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/content-reference-agent.git
-cd content-reference-agent
+git clone https://github.com/Viviball/Viral-Content-Analyser.git
+cd Viral-Content-Analyser
 ```
 
 Copy the environment example:
